@@ -125,6 +125,27 @@ li:hover {
 	text-align: center;
 	margin-bottom: 1em;
 }
+/* filtres des travaux par catégorie*/
+button{
+	min-width: 15%;
+	height: 37px;
+	margin-right: 10px;
+	font-family: 'Syne';
+	color: #1D6154;
+	border: 1px solid #1D6154;
+	border-radius: 60px;
+	background: none;
+}
+.active{
+	display: flex;
+	justify-content: center;
+	margin: 10% 10% 10% 10%;
+}
+button:hover{
+	background-color: #1D6154;
+	color: white;
+}
+
 .gallery {
 	width: 100%;
 	display: grid;
@@ -139,7 +160,7 @@ li:hover {
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
