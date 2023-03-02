@@ -1,11 +1,13 @@
+// Sélectionner l'élément DOM qui contiendra la galerie
+  const gallery = document.querySelector(".gallery"); 
 //Recuperation des projet via l'API
 fetch("http://localhost:5678/api/works")
   .then(response => response.json())
   .then(data => {
     console.log("Liste des projets : ", data);
+    //Créer un élément figure 
     for (let i = 0; i < data.length; i++) {
-      const gallery = document.querySelector(".gallery"); 
-
+      
       let figure = document.createElement("figure");
       let img = document.createElement("img");
       let figcaption = document.createElement("figcaption");
@@ -14,6 +16,7 @@ fetch("http://localhost:5678/api/works")
       img.alt = data[i].title;
 
       figcaption.textContent = data[i].title;
+      figure.className = data[i].category.name;
 
       figure.appendChild(img);
       figure.appendChild(figcaption);
@@ -28,8 +31,7 @@ fetch("http://localhost:5678/api/works")
 fetch("http://localhost:5678/api/categories")
   .then(response => response.json())
   .then(categories => {
-    // Sélectionner l'élément DOM qui contiendra la galerie
-    const gallery = document.querySelector(".gallery"); 
+  
     // Créer un élément div pour les filtres
     const filters = document.createElement("div");
     const buttonAll = document.createElement("button");
@@ -44,10 +46,13 @@ fetch("http://localhost:5678/api/categories")
     filters.className = "active";
 
     buttonAll.addEventListener("click", function(){
-      document.querySelector(".gallery").innerHTML = "";
-      data.forEach(function(categories) {
-        createCategoriesElement(categories);
-      });
+      // Afficher tous 
+      let figures = document.querySelectorAll("figure");
+      for (let i = 0; i < figures.length; i++){
+        figures[i].style.display = "block";
+      }
+     
+      console.log(this.textContent);
     });
 
     // Créer un bouton pour chaque catégorie
@@ -57,18 +62,28 @@ fetch("http://localhost:5678/api/categories")
       filters.appendChild(filterButton);
 
       filterButton.addEventListener("click", function(){
-         // Filtrer les éléments de la galerie selon la catégorie sélectionnée
-        const filteredGallery= gallery.filter(function(categories){
-          return categories.category.name === categories[i].name;
-        });
-        document.querySelector(".gallery").innerHTML = "";
-        // Ajouter les éléments filtrés à la galerie
-        filteredData.forEach(function(categories) {
-          createCategoriesElement(categories);
-        });
+        console.log(this.textContent);
+      // Afficher les éléments de la catégorie correspondante, et masquer les autres 
+       filterButtons(this.textContent);
       });
     };
 
   })
   .catch(error => console.error(error));
+
+  //Filtrer les éléments en fonction de la catégorie
+  function filterButtons(className) {
+    let figures = document.querySelectorAll("figure");
+    for (let i = 0; i < figures.length; i++) {
+      if (figures[i].classList.contains(className)) {
+        figures[i].style.display = "block";
+      } else {
+        figures[i].style.display = "none";
+
+        console.log("index = "+ i);
+      }
+    }
+  }
+  
+  //filterButtons("catgories");
 
