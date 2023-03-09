@@ -4,7 +4,6 @@
 fetch("http://localhost:5678/api/works")
   .then(response => response.json())
   .then(data => {
-    console.log("Liste des projets : ", data);
     //Créer un élément figure 
     for (let i = 0; i < data.length; i++) {
       
@@ -16,7 +15,7 @@ fetch("http://localhost:5678/api/works")
       img.alt = data[i].title;
 
       figcaption.textContent = data[i].title;
-      figure.className = data[i].category.name;
+      figure.className = data[i].category.name.replaceAll(' ', '-');
 
       figure.appendChild(img);
       figure.appendChild(figcaption);
@@ -51,8 +50,6 @@ fetch("http://localhost:5678/api/categories")
       for (let i = 0; i < figures.length; i++){
         figures[i].style.display = "block";
       }
-     
-      console.log(this.textContent);
     });
 
     // Créer un bouton pour chaque catégorie
@@ -62,7 +59,6 @@ fetch("http://localhost:5678/api/categories")
       filters.appendChild(filterButton);
 
       filterButton.addEventListener("click", function(){
-        console.log(this.textContent);
       // Afficher les éléments de la catégorie correspondante, et masquer les autres 
        filterButtons(this.textContent);
       });
@@ -75,15 +71,13 @@ fetch("http://localhost:5678/api/categories")
   function filterButtons(className) {
     let figures = document.querySelectorAll("figure");
     for (let i = 0; i < figures.length; i++) {
-      if (figures[i].classList.contains(className)) {
+      console.log( figures[i]);
+      if (figures[i].classList.contains(className.replaceAll(' ', '-'))) {
         figures[i].style.display = "block";
       } else {
         figures[i].style.display = "none";
-
-        console.log("index = "+ i);
       }
     }
   }
   
-  //filterButtons("catgories");
 
