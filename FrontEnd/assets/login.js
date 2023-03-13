@@ -1,6 +1,6 @@
+
 // Récupération du formulaire et de ses champs
 const form = document.querySelector("#login");
-//const tokenKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY1MTg3NDkzOSwiZXhwIjoxNjUxOTYxMzM5fQ.JGN1p8YIfR-M-5eQ-Ypy6Ima5cKA4VbfL2xMr2MgHm4";
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 // Écoute de l'événement de soumission du formulaire
@@ -38,6 +38,8 @@ form.addEventListener("submit", (event) => {
             login.appendChild(messageError); // Ajout du message d'erreur à la page de connexion
         }
       } else {
+        // Stockage du token d'authentification dans le localStorage
+        localStorage.setItem("token", data.token);
         // Redirection vers la page d'accueil si l'utilisateur est connecté
         window.location.href = "./index.html";
         const messageError =document.getElementById("messageError");
