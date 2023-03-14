@@ -38,8 +38,8 @@ form.addEventListener("submit", (event) => {
             login.appendChild(messageError); // Ajout du message d'erreur à la page de connexion
         }
       } else {
-        // Stockage du token d'authentification dans le localStorage
-        localStorage.setItem("token", data.token);
+        // Stockage du token d'authentification dans le sessionStorage
+        sessionStorage.setItem("token", data.token);
         // Redirection vers la page d'accueil si l'utilisateur est connecté
         window.location.href = "./index.html";
         const messageError =document.getElementById("messageError");
@@ -47,6 +47,7 @@ form.addEventListener("submit", (event) => {
       }
     })
     .catch((error) => console.error(error));
+ 
 });
 
 
