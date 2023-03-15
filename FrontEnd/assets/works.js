@@ -79,46 +79,23 @@ fetch("http://localhost:5678/api/categories")
       }
     }
   }
+// Récupération du bouton de connexion dans la nav
+const loginButton = document.querySelector('nav li a[href="./login.html"]');
 
+// Vérification de la présence du token dans la sessionStorage
+if (sessionStorage.getItem("token")) {
+  // Changement de bouton de connexion pour afficher "Logout" au lieu de "Login"
+  loginButton.textContent = "Logout";
+  loginButton.href = "#";
 
-//Recuperation de token
-const token = localStorage.getItem("token");
-
-// Ajouter un bouton "Modifier" 
-/*for (let i = 0; i < data.length; i++) {
-  
-  let button = document.createElement("button");
-  button.innerHTML = '<i class="fa fa-pencil"></i>';
-  button.addEventListener("click", function() {
-    showModal(data[i]);
+  // Ajout d'un gestionnaire d'événements de clic pour déconnecter l'utilisateur et supprimer le token de la sessionStorage
+  loginButton.addEventListener("click", () => {
+    sessionStorage.removeItem("token");
+    window.location.href = "./login.html";
   });
-  figure.appendChild(button); 
-}*/
-// Créer une fenêtre modale
-const modal = document.createElement("div");
-modal.classList.add("modal");
-
-// Créer le contenu de la fenêtre modale
-const modalContent = document.createElement("div");
-modalContent.classList.add("modal-content");
-
-// Ajouter le titre à la fenêtre modale
-const modalTitle = document.createElement("h2");
-modalTitle.textContent = "Galerie photo";
-modalContent.appendChild(modalTitle);
-
-// Ajouter le contenu à la fenêtre modale
-const modalText = document.createElement("p");
-modalText.textContent = "";
-modalContent.appendChild(modalText);
-
-// Ajouter le contenu à la fenêtre modale
-modal.appendChild(modalContent);
-console.log(modalContent);
-
-// Ajouter la fenêtre modale au document
-document.body.appendChild(modal);
-
+  
+  
+}
 
 
   
