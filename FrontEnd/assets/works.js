@@ -25,6 +25,13 @@ fetch("http://localhost:5678/api/works")
   })
   .catch(error => console.error(error));
 
+// Fonction pour cacher/supprimer les filtres
+function hideFilters() {
+  const activeElement = document.querySelector(".active");
+  if (activeElement) {
+    activeElement.style.display = "none";
+  }
+}
 
 // Ajout des filtres pour afficher les travaux par catégorie
 fetch("http://localhost:5678/api/categories")
@@ -34,8 +41,8 @@ fetch("http://localhost:5678/api/categories")
     // Créer un élément div pour les filtres
     const filters = document.createElement("div");
     const buttonAll = document.createElement("button");
-
-     // Ajouter une classe CSS à l'élément div des filtres
+   
+    // Ajouter une classe CSS à l'élément div des filtres
     filters.classList.add("filter-buttons");
     gallery.before(filters);
     // Créer un bouton pour afficher tous les éléments
@@ -63,7 +70,11 @@ fetch("http://localhost:5678/api/categories")
        filterButtons(this.textContent);
       });
     };
-
+    // Masquer les filtres si l'utilisateur est connecté
+    if (sessionStorage.getItem("token")) {
+      hideFilters();
+    }
+   
   })
   .catch(error => console.error(error));
 
@@ -84,6 +95,14 @@ const loginButton = document.querySelector('nav li a[href="./login.html"]');
 
 // Vérification de la présence du token dans la sessionStorage
 if (sessionStorage.getItem("token")) {
+  /*//Récupération de l'élément qui contient les filtres
+  const activeElement = document.querySelector(".active");
+  if (activeElement) {
+    //Masquer les filtres
+    activeElement.style.display = "none";
+    activeElement.classList.remove("active");  
+  }*/
+
   // Changement de bouton de connexion pour afficher "Logout" au lieu de "Login"
   loginButton.textContent = "Logout";
   loginButton.href = "#";
@@ -93,8 +112,21 @@ if (sessionStorage.getItem("token")) {
     sessionStorage.removeItem("token");
     window.location.href = "./login.html";
   });
-  
-  
+
+/*// Récupération de l'élément ayant la classe "active"
+const activeElement = document.querySelector(".active");
+
+// Vérification de la présence du token dans le local storage
+  //if(token !== "" && token !== null){
+  if (localStorage.getItem("token")) {
+    // Si le token est présent, on retire la classe "active" de l'élément
+    activeElement.style.display = "none";
+    activeElement.classList.remove("active"); 
+  }*/
+
+//Creation du texte modifier
+
+
 }
 
 
