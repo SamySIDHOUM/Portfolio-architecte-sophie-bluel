@@ -90,45 +90,33 @@ fetch("http://localhost:5678/api/categories")
       }
     }
   }
+
 // Récupération du bouton de connexion dans la nav
 const loginButton = document.querySelector('nav li a[href="./login.html"]');
 
 // Vérification de la présence du token dans la sessionStorage
 if (sessionStorage.getItem("token")) {
-  /*//Récupération de l'élément qui contient les filtres
-  const activeElement = document.querySelector(".active");
-  if (activeElement) {
-    //Masquer les filtres
-    activeElement.style.display = "none";
-    activeElement.classList.remove("active");  
-  }*/
-
-  // Changement de bouton de connexion pour afficher "Logout" au lieu de "Login"
+  // Afficher "Logout" sur le bouton de connexion
   loginButton.textContent = "Logout";
-  loginButton.href = "#";
-
-  // Ajout d'un gestionnaire d'événements de clic pour déconnecter l'utilisateur et supprimer le token de la sessionStorage
-  loginButton.addEventListener("click", () => {
-    sessionStorage.removeItem("token");
-    window.location.href = "./login.html";
-  });
-
-/*// Récupération de l'élément ayant la classe "active"
-const activeElement = document.querySelector(".active");
-
-// Vérification de la présence du token dans le local storage
-  //if(token !== "" && token !== null){
-  if (localStorage.getItem("token")) {
-    // Si le token est présent, on retire la classe "active" de l'élément
-    activeElement.style.display = "none";
-    activeElement.classList.remove("active"); 
-  }*/
-
-//Creation du texte modifier
-
-
 }
 
+// Fonction pour alterner l'état de connexion de l'utilisateur
+function toggleLogin() {
+  if (sessionStorage.getItem("token")) {
+    // Déconnecter l'utilisateur et supprimer le token de la sessionStorage
+    sessionStorage.removeItem("token");
+    loginButton.textContent = "Login";
+  } else {
+    // Connecter l'utilisateur et stocker le token dans la sessionStorage
+    sessionStorage.setItem("token", "mytoken");
+    loginButton.textContent = "Logout";
+  }
+}
 
-  
+// Ajout d'un gestionnaire d'événements de clic pour appeler la fonction toggleLogin()
+loginButton.addEventListener("click", toggleLogin);
+
+
+
+
 
