@@ -116,7 +116,42 @@ function toggleLogin() {
 // Ajout d'un gestionnaire d'événements de clic pour appeler la fonction toggleLogin()
 loginButton.addEventListener("click", toggleLogin);
 
+// Vérifier si le token est stocké dans sessionStorage
+if (sessionStorage.getItem("token")) {
+///la barre edit Mode///
+  // Créer la section parente pour tous les éléments
+  const editModeSection = document.createElement("section");
+  editModeSection.classList.add("edit-mode-section");
 
+  // Créer l'élément div pour le rectangle noir
+  const editModeDiv = document.createElement("div");
+  editModeDiv.classList.add("edit-mode");
+
+  // Créer l'élément avec l'icône et le texte "Mode édition" pour le rectangle noir
+  const editModeIcon = document.createElement("i");
+  editModeIcon.classList.add("fa-regular", "fa-pen-to-square");
+  const editModeText = document.createTextNode("Mode édition");
+
+  // Créer l'élément bouton pour publier les changements
+  const publishButton = document.createElement("button");
+  publishButton.classList.add("publish-btn");
+  publishButton.textContent = "Publier les changements";
+
+  // Ajouter l'icône et le texte dans div pour le rectangle noir
+  editModeDiv.appendChild(editModeIcon);
+  editModeDiv.appendChild(editModeText);
+
+  // Ajouter div et le bouton à la section parente
+  editModeSection.appendChild(editModeDiv);
+  editModeSection.appendChild(publishButton);
+
+  // Trouver l'élément header
+  const header = document.querySelector("header");
+
+  // Insérer la section parente nouvellement créée avant le header
+  header.parentElement.insertAdjacentElement("beforebegin", editModeSection);
+
+}
 
 
 
