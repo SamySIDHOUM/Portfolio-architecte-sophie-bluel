@@ -239,10 +239,32 @@ header a{
 #login a{
 	margin: 2% 0 0 0;
 }
-
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
 	margin: 2em
 }
-
+/*la barre Mode édition*/
+.edit-mode-section{
+	height:59px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #000000;
+	margin-top: 0%;
+}
+.edit-mode{
+	color: #FFFFFF;
+	margin: 4%;
+} 
+.edit-mode i {
+	margin-right: 10px;
+} 
+.publish-btn {
+	color: #000000;
+	border: none;
+	cursor: pointer;
+	background: #FFFFFF;
+	border-radius: 60px;
+}
+  
