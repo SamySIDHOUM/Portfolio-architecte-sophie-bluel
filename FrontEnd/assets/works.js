@@ -118,7 +118,7 @@ loginButton.addEventListener("click", toggleLogin);
 
 // Vérifier si le token est stocké dans sessionStorage
 if (sessionStorage.getItem("token")) {
-///la barre edit Mode///
+/// Mode édition///
   // Créer la section parente pour tous les éléments
   const editModeSection = document.createElement("section");
   editModeSection.classList.add("edit-mode-section");
@@ -150,6 +150,44 @@ if (sessionStorage.getItem("token")) {
 
   // Insérer la section parente nouvellement créée avant le header
   header.parentElement.insertAdjacentElement("beforebegin", editModeSection);
+
+  // Créer l'élément avec l'icône et le texte "modifier" pour la section #introduction
+  const introEditLink = document.createElement("a");
+  introEditLink.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  introEditLink.classList.add("modif-image");
+
+  // Trouver l'image dans la section #introduction
+  const introImage = document.querySelector("#introduction figure img");
+
+  // Insérer l'élément nouvellement créé juste après l'image
+  introImage.insertAdjacentElement("afterend", introEditLink);
+
+  // Créer l'élément avec l'icône et le texte "modifier" pour la section #articles
+  const articlesEditLink = document.createElement("a");
+  articlesEditLink.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  articlesEditLink.classList.add("modif-article");
+
+  // Trouver la première section dans la section #articles
+  const firstSection = document.querySelector("article h2");
+
+  // Insérer l'élément nouvellement créé juste avant la première section
+  firstSection.insertAdjacentElement("beforebegin", articlesEditLink);
+
+  // Créer l'élément avec l'icône et le texte "modifier" pour la section #portfolio
+  const portfolioEditLink = document.createElement("a");
+  portfolioEditLink.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>modifier';
+  portfolioEditLink.classList.add("modif-porjet");
+
+  // Trouver le titre h2 dans la section #portfolio
+  const portfolioTitle = document.querySelector("#portfolio h2");
+
+  // Insérer l'élément portfolioEditLink juste après le titre h2 dans la section #portfolio
+  portfolioTitle.insertAdjacentElement("afterend", portfolioEditLink);
+  /*// Ajouter un gestionnaire d'événements pour le clic sur le lien "modifier" dans la section #portfolio
+  portfolioEditLink.addEventListener("click", function(event) {
+    event.preventDefault();
+    //TODO Code pour ouvrir la boîte de dialogue de modification du portfolio
+  });*/
 
 }
 
