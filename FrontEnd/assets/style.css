@@ -267,4 +267,24 @@ footer nav ul {
 	background: #FFFFFF;
 	border-radius: 60px;
 }
+/*modifier*/
+.modif-image{
+	margin-left: 10%;
+	cursor: pointer;
+}
+.modif-article{
+	margin-bottom: 10%;
+	cursor: pointer;
+}
+.modif-porjet{
+	cursor: pointer;
+}
+#portfolio .modif-porjet {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+
+
   
