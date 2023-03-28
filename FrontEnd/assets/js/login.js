@@ -1,4 +1,3 @@
-
 // Récupération du formulaire et de ses champs
 const form = document.querySelector("#login");
 const emailInput = document.getElementById("email");
@@ -38,7 +37,7 @@ form.addEventListener("submit", (event) => {
             login.appendChild(messageError); // Ajout du message d'erreur à la page de connexion
         }
       } else {
-        // Stockage du token d'authentification dans le sessionStorage
+        // Stockage du token d'authentification dans la sessionStorage
         sessionStorage.setItem("token", data.token);
         // Redirection vers la page d'accueil si l'utilisateur est connecté
         window.location.href = "./index.html";

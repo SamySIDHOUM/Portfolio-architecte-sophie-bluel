@@ -276,14 +276,50 @@ footer nav ul {
 	margin-bottom: 10%;
 	cursor: pointer;
 }
-.modif-porjet{
+.modif-projet{
 	cursor: pointer;
 }
-#portfolio .modif-porjet {
+#portfolio .modif-projet {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
+/* la fenêtre modale */
+.modal {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	width: 630px;
+	height: 731px;
+	left: 0;
+	top: 0;
+  	overflow: auto;
+}
+/* contenu de la fenêtre modale */
+.modal-content {
+	width: 80%;
+	background-color:#FFFFFF;
+	margin: 15% auto;
+	padding: 20px;
+	border-radius: 10px;
+}
+/*le bouton de fermeture */
+.close-bts {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  	color:  #000000;
+  	border: none; 
+}
+/* Style de la fenêtre modale */
+.modal-content p {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 
 
 
