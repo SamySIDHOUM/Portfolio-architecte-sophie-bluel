@@ -176,7 +176,7 @@ if (sessionStorage.getItem("token")) {
   // Créer l'élément avec l'icône et le texte "modifier" pour la section #portfolio
   const portfolioEditLink = document.createElement("a");
   portfolioEditLink.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>modifier';
-  portfolioEditLink.classList.add("modif-porjet");
+  portfolioEditLink.classList.add("modif-projet");
 
   // Trouver le titre h2 dans la section #portfolio
   const portfolioTitle = document.querySelector("#portfolio h2");
