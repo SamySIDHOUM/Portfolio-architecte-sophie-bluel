@@ -1,76 +1,106 @@
-// Création de la fenêtre modale
-const modal = document.createElement("div");
-modal.classList.add("modal");
+// Récupérer la modal
+const modal = document.getElementById("myModal");
 
-// Création du contenu de la fenêtre modale
-const modalContent = document.createElement("div");
-modalContent.classList.add("modal-content");
+// Récupérer le bouton "modifier"
+const editButton = document.querySelector(".modif-projet");
 
-// Ajout d'un bouton pour fermer la fenêtre modale
-const closeButton = document.createElement("button");
-closeButton.textContent = "X";
-closeButton.classList.add("close-bts");
-modalContent.appendChild(closeButton);
+// Récupérer le span avec la classe "close" pour fermer la modal
+const closeSpan = document.querySelector(".close");
 
-// Ajout du contenu dans la fenêtre modale
-const modalText = document.createElement("p");
-modalText.textContent = "Galerie photo";
-modalContent.appendChild(modalText);
+// Récupérer l'élément DOM qui contiendra la galerie
+const gallery = document.createElement("div");
+gallery.className = "gallery-modal";
 
-// Création d'un conteneur pour les images de la galerie
-const galleryContainer = document.createElement("div");
-galleryContainer.classList.add("gallery-container");
-modalContent.appendChild(galleryContainer);
+// Récupération des projets via l'API
+fetch("http://localhost:5678/api/works")
+  .then(response => response.json())
+  .then(data => {
+    console.log("Galerie de photos :", data);
+    for (let i = 0; i < data.length; i++) {
+      let figure = document.createElement("figure");
+      let imgContainer = document.createElement("div");
+      let img = document.createElement("img");
+      let deleteIcon = document.createElement("i");
+      let figcaption = document.createElement("figcaption");
 
-// Ajout des images de la galerie dans le conteneur
-const gallery = document.querySelector(".gallery"); 
-    ///TODO importer les image///
+      img.src = data[i].imageUrl;
+      img.alt = data[i].title;
+
+      figcaption.textContent = "éditer";
+      deleteIcon.className = "fa-solid fa-trash-can";
+      imgContainer.className = "image-container";
+
+      imgContainer.appendChild(deleteIcon);
+      imgContainer.appendChild(img);
+      figure.appendChild(imgContainer);
+      figure.appendChild(figcaption);
+      figure.className = data[i].category.name.replaceAll(' ', '-');
+
+      gallery.appendChild(figure);
+      //modalContent.appendChild(gallery); 
+    }
+    console.log("Icônes supprimer :", document.querySelectorAll(".fa-solid fa-trash-can"));
+    modalContent.insertBefore(gallery, buttonContainer);
+    //modalContent.insertAdjacentElement("afterend", buttonContainer);
+  })
+  .catch(error => console.error(error));
+
+// Ajouter un événement "click" au bouton "modifier" 
+editButton.addEventListener("click", function() {
+  modal.style.display = "block";
+  modal.appendChild(gallery);
+});
+
+// Ajouter un événement "click" au span "close" pour fermer la modal
+closeSpan.addEventListener("click", function() {
+  modal.style.display = "none";
+  modal.removeChild(gallery);
+});
+
+// Ajouter un événement "click" en dehors de la modal pour fermer la modal
+window.addEventListener("click", function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+    modal.removeChild(gallery);
+  }
+});
+/*// Fermer la modal avec Escape
+window.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" || e.key === "Esc") {
+      closeModal(e);
+  }
+  console.log("keydown");
+});*/
+// Récupérer modal content
+const modalContent = document.querySelector(".modal-content");
+
+// Création d'un élément div parent avec la classe flexColumn
+const buttonContainer = document.createElement("div");
+buttonContainer.classList.add("flex-column");
 
 // Création d'un bouton pour ajouter une photo à la galerie
 const addButton = document.createElement("button");
 addButton.textContent = "Ajouter une photo";
 addButton.classList.add("add-bts");
-    ///TODOle code pour ajouter///
+    ///TODO le code pour ajouter///
 
-// Création d'un bouton pour supprimer la galerie
+// Création d'un élément pour supprimer la galerie
 const deleteGallery = document.createElement("a");
 deleteGallery.textContent = "Supprimer la galerie";
 deleteGallery.classList.add("delete-gal");
     ///TODO le code pour supprimer///
 
-// Ajout des boutons à la fenêtre modale
-modalContent.appendChild(addButton);
-modalContent.appendChild(deleteGallery);
+// Ajout des boutons à l'élément div parent
+buttonContainer.appendChild(addButton);
+buttonContainer.appendChild(deleteGallery);
+
+// Ajout de l'élément div parent à la fenêtre modale
+modalContent.appendChild(buttonContainer);
 
 modal.appendChild(modalContent);
+//modalContent.appendChild(gallery);
 
-// Affichage de la fenêtre modale
-document.body.appendChild(modal);
-console.log(modal);
 
-// Fonction pour ouvrir la fenêtre modale
-function openModal() {
-  modal.style.display = "block";
-}
 
-// Fonction pour fermer la fenêtre modale
-function closeModal() {
-  modal.style.display = "none";
-}
 
-// Détection du clic sur le bouton de fermeture
-closeButton.addEventListener("click", closeModal);
-
-// Détection du clic en dehors de la fenêtre modale pour la fermer
-window.addEventListener("click", (event) => {
-  if (event.target === modal) {
-    closeModal();
-  }
-});
-
-// Ajout d'un écouteur d'événement au clic sur .modif-projet
-const modifProjet = document.querySelector(".modif-projet");
-modifProjet.addEventListener("click", openModal);
-
-  
 
