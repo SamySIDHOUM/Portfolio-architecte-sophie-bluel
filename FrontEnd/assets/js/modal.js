@@ -44,23 +44,26 @@ fetch("http://localhost:5678/api/works")
 // Ajouter un événement "click" au bouton "modifier" 
 editButton.addEventListener("click", function() {
   modal.style.display = "block";
-  //modal.appendChild(gallery);
 });
 
 // Ajouter un événement "click" au span "close" pour fermer la modal
 closeSpan.addEventListener("click", function() {
   modal.style.display = "none";
-  //modal.removeChild(gallery);
-});
+  });
 
 // Ajouter un événement "click" en dehors de la modal pour fermer la modal
 window.addEventListener("click", function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
-    //modal.removeChild(gallery);
   }
 });
 
+// Ajouter un événement "keydown" pour détecter l'appui sur la touche "Esc"
+window.addEventListener("keydown", function(event) {
+  if (event.key === "Escape" && modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+});
 
 
 
