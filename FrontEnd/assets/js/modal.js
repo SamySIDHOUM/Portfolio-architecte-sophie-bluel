@@ -65,6 +65,17 @@ window.addEventListener("keydown", function(event) {
   }
 });
 
+// Récupérer le bouton "add-bts"
+const addButton = document.querySelector(".add-bts");
+
+// Récupérer la modal-addwork
+const modalAddwork = document.querySelector(".modal-addwork");
+
+// Ajouter un événement "click" au bouton "add-bts"
+addButton.addEventListener("click", function() {
+  modalAddwork.style.display = "block";
+  modalContent.style.display = "none";
+});
 
 
 
