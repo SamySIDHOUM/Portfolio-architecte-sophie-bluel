@@ -77,7 +77,29 @@ addButton.addEventListener("click", function() {
   modalContent.style.display = "none";
 });
 
+// Récupérer la flèche retour
+const backArrow = document.querySelector(".fa-solid.fa-arrow-left");
 
+// Ajouter un événement "click" à la flèche retour
+backArrow.addEventListener("click", function() {
+  // Masquer la modal-addwork
+  modalAddwork.style.display = "none";
+  // Afficher la modal-content
+  modalContent.style.display = "block";
+});
+
+// Récupérer la croix de fermeture de la modal
+const closeIcons = document.querySelectorAll(".close");
+
+// Ajouter un événement "click" à chaque croix de fermeture
+closeIcons.forEach(icon => {
+  icon.addEventListener("click", function() {
+    // Masquer la modal
+    modal.style.display = "none";
+    // Réinitialiser les champs du formulaire
+    document.getElementById("form-addwork").reset();
+  });
+});
 
 
 
