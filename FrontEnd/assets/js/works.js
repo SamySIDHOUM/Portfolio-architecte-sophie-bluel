@@ -27,7 +27,7 @@ fetch("http://localhost:5678/api/works")
 
 // Fonction pour cacher/supprimer les filtres
 function hideFilters() {
-  const activeElement = document.querySelector(".active");
+  const activeElement = document.querySelector(".filter-buttons");
   if (activeElement) {
     activeElement.style.display = "none";
   }
@@ -48,24 +48,51 @@ fetch("http://localhost:5678/api/categories")
     // Créer un bouton pour afficher tous les éléments
     buttonAll.innerText = "Tous";
     filters.appendChild(buttonAll);
-    // Ajouter une classe CSS active au bouton "Tous"
-    filters.className = "active";
 
+    // Ajouter une classe CSS active au bouton "Tous"
     buttonAll.addEventListener("click", function(){
+        let children = filters.childNodes;
+      
+        for (let i = 0; i < children.length; i++) {
+          if(children[i].classList.contains("active")){
+            children[i].classList.remove("active");
+          }
+        }
+      
+      buttonAll.classList.add("active");
+
       // Afficher tous 
       let figures = document.querySelectorAll("figure");
       for (let i = 0; i < figures.length; i++){
         figures[i].style.display = "block";
       }
     });
-
+  
     // Créer un bouton pour chaque catégorie
     for(let i=0; i < categories.length; i++){
       const filterButton = document.createElement("button");
       filterButton.innerText = categories[i].name;
+
+      // Ajouter le bouton au conteneur de filtres
       filters.appendChild(filterButton);
 
+      // Ajouter un événement click au bouton pour filtrer les éléments
       filterButton.addEventListener("click", function(){
+
+      // Retirer la classe "active" de tous les boutons de filtre
+      if (filters.hasChildNodes()) {
+        let children = filters.childNodes;
+      
+        for (let i = 0; i < children.length; i++) {
+          if(children[i].classList.contains("active")){
+            children[i].classList.remove("active");
+          }
+        }
+      }
+      
+      // Ajouter la classe "active" au bouton de filtre sélectionné
+      filterButton.classList.add("active");
+
       // Afficher les éléments de la catégorie correspondante, et masquer les autres 
        filterButtons(this.textContent);
       });
@@ -74,7 +101,6 @@ fetch("http://localhost:5678/api/categories")
     if (sessionStorage.getItem("token")) {
       hideFilters();
     }
-   
   })
   .catch(error => console.error(error));
 
@@ -90,7 +116,7 @@ fetch("http://localhost:5678/api/categories")
       }
     }
   }
-
+ 
 // Récupération du bouton de connexion dans la nav
 const loginButton = document.querySelector('nav li a[href="./login.html"]');
 
@@ -174,21 +200,15 @@ if (sessionStorage.getItem("token")) {
   firstSection.insertAdjacentElement("beforebegin", articlesEditLink);
 
   // Créer l'élément avec l'icône et le texte "modifier" pour la section #portfolio
-  const portfolioEditLink = document.createElement("a");
-  portfolioEditLink.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>modifier';
-  portfolioEditLink.classList.add("modif-projet");
+  const modifProjet = document.createElement("a");
+  modifProjet.innerHTML = '<i class="fa-regular fa-pen-to-square"></i> modifier';
+  modifProjet.classList.add("modif-projet");
 
   // Trouver le titre h2 dans la section #portfolio
-  const portfolioTitle = document.querySelector("#portfolio h2");
+  const portfolioEditLink = document.querySelector("#portfolio div");
 
-  // Insérer l'élément portfolioEditLink juste après le titre h2 dans la section #portfolio
-  portfolioTitle.insertAdjacentElement("afterend", portfolioEditLink);
-  /*// Ajouter un gestionnaire d'événements pour le clic sur le lien "modifier" dans la section #portfolio
-  portfolioEditLink.addEventListener("click", function(event) {
-    event.preventDefault();
-    //TODO Code pour ouvrir la boîte de dialogue de modification du portfolio
-  });*/
-
+  // Insérer l'élément portfolioEditLink juste après la modifProject
+  portfolioEditLink.insertAdjacentElement("beforeend", modifProjet);
 }
 
 
