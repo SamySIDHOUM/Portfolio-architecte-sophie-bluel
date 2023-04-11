@@ -30,7 +30,9 @@
 		<div class="modal-content">
 	  		<span class="close">&times;</span>
 			<p>Galerie photo</p>
-			<div id="gallery-modal"></div>
+			<div id="gallery-modal">	
+			</div>
+			<hr>
 			<div id="btn-menu-show" class="flex-column">
 				<button class="add-bts">Ajouter une photo</button>
 				<a class="delete-gal">Supprimer la galerie</a>
@@ -40,9 +42,29 @@
 		<div class="modal-addwork">
 			<span class="icons">
 				<i class="fa-solid fa-arrow-left "></i>
-				<spa class="close">&times;</span>
+				<span class="close">&times;</span>
 			</span>
 			<p>Ajout photo</p>
+			<form id="form-addwork" action="#" method="post" enctype="multipart/form-data">
+				<div id="img-container">
+				  <i class="fa-solid fa-image"></i>
+				  <label id="input-container" for="add-imgbutton"><span>+ Ajouter photo</span>
+					<input type="file" name="" id="add-imgbutton" accept=".png, .jpg">
+				  </label>
+				  <p>jpg, png: 4mo max</p>
+				</div>
+				<div class="input-title-category">
+				  <div id="info-title" class="input-title-category">
+					<label for="title-img">Titre</label>
+					<input type="text" name="title-img" id="title-img">
+				  </div>
+				  <label for="category-option">Catégorie</label>
+				  <select name="category-option" id="category-option">
+				  </select>
+				</div>
+				<hr>
+				<input type="submit" name="submit-work" id="submit-work" value="Valider">
+			  </form>
 		</div>
   	</div>
 	
@@ -58,7 +80,10 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
+		<div class="project">
+			<h2>Mes Projets</h2>
+		</div>
+		
 		<div class="gallery">
 			<!--<figure>
 				<img src="assets/images/abajour-tahina.png" alt="Abajour Tahina">
