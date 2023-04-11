@@ -8,7 +8,7 @@ const editButton = document.querySelector(".modif-projet");
 const closeSpan = document.querySelector(".close");
 
 // Récupérer l'élément DOM qui contiendra la galerie
-const gallery = document.getElementById("gallery-modal");
+const gallery = document.querySelector("#gallery-modal");
 // Récupérer modal content
 const modalContent = document.querySelector(".modal-content");
 
@@ -16,8 +16,7 @@ const modalContent = document.querySelector(".modal-content");
 fetch("http://localhost:5678/api/works")
   .then(response => response.json())
   .then(data => {
-    console.log("Galerie de photos :", data);
-    for (let i = 0; i < data.length; i++) {
+    for (let i = 0;i < data.length; i++) {
       let figure = document.createElement("figure");
       let img = document.createElement("img");
       let deleteIcon = document.createElement("i");
@@ -35,7 +34,7 @@ fetch("http://localhost:5678/api/works")
       figure.classList.add("figure-modal-add");
 
       gallery.appendChild(figure);
-      modalContent.appendChild(gallery); 
+      //modalContent.appendChild(gallery); 
     }
   
   })
@@ -101,7 +100,119 @@ closeIcons.forEach(icon => {
   });
 });
 
+// Récupérer la liste déroulante
+const categorySelect = document.getElementById("category-option");
 
+// Récupérer les catégories depuis l'API
+fetch("http://localhost:5678/api/categories")
+  .then(response => response.json())
+  .then(data => {
+    // Parcourir les catégories et créer une option pour chaque catégorie
+    for (let i = 0; i < data.length; i++) {
+      let option = document.createElement("option");
+      option.value = data[i].id;
+      option.text = data[i].name;
+      categorySelect.appendChild(option);
+    }
+  })
+  .catch(error => console.error(error));
+
+//Récupérer le formulaire et le bouton submit
+const form = document.getElementById("form-addwork");
+const submitButton = document.getElementById("submit-work");
+const imgButton = document.getElementById("add-imgbutton");
+
+//Récupérer les éléments du formulaire
+const titleInput = document.getElementById("title-img");
+
+//Ecouter le clic sur le bouton Ajouter photo
+imgButton.addEventListener("change", function() {
+  const file = this.files[0];
+  const reader = new FileReader();
+  reader.addEventListener("load", function() {
+    const imageUrl = reader.result;
+    const imgPreview = document.createElement("img");
+    imgPreview.src = imageUrl;
+    document.getElementById("img-container").appendChild(imgPreview);
+  });
+  reader.readAsDataURL(file);
+});
+
+//Ecouter le clic sur le bouton Valider
+submitButton.addEventListener("click", function(event) {
+  event.preventDefault(); // Empêcher le rechargement de la page
+  // Récupérer les valeurs du formulaire
+  const title = titleInput.value;
+  const category = categorySelect.value;
+  const imageUrl = document.querySelector("#img-container img").src;
+
+  // Vérifier si les champs sont remplis
+  if (title === "" || category === "" || imageUrl === "") {
+    alert("Veuillez remplir tous les champs");
+    return;
+  }
+
+  // Créer les éléments à ajouter dans le DOM
+  const figure = document.createElement("figure");
+  const img = document.createElement("img");
+  const figcaption = document.createElement("figcaption");
+  const deleteIcon = document.createElement("i");
+
+  // Définir les attributs des éléments créés
+  img.src = imageUrl;
+  img.alt = title;
+  deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
+  figcaption.textContent = "éditer";
+
+  // Ajouter les éléments créés au DOM
+  figcaption.appendChild(deleteIcon);
+  figure.appendChild(img);
+  figure.appendChild(figcaption);
+  figure.classList.add("figure-modal-add");
+  gallery.appendChild(figure);
+
+  // Réinitialiser le formulaire
+  form.reset();
+  // Masquer la modal-addwork
+  modalAddwork.style.display = "none";
+  // Afficher la modal-content
+  modalContent.style.display = "block";
+  // Masquer la modal
+  modal.style.display = "none";
+
+  // Récupérer le token depuis la sessionStorage
+  const token = sessionStorage.getItem("token");
+
+  // Envoyer l'image à l'API
+  const formData = new FormData();
+  formData.append("image", imgButton.files[0]);
+
+  fetch("http://localhost:5678/api/works", {
+    method: "POST",
+    headers: {
+      "accept": "*/*",
+      "Authorization": `Bearer ${token}`
+    },
+    body: formData
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Erreur lors de l'envoi de l'image");
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+});
+
+
+
+  
 
 
 
