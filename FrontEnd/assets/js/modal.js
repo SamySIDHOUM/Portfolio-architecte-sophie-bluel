@@ -180,13 +180,15 @@ submitButton.addEventListener("click", function(event) {
         messageErrorInput.innerText = "Veuillez remplir tous les champs";
         messageErrorInput.style.color = "red";
         messageErrorInput.id ="messageErrorInput";
-        console.log(messageErrorInput);
+         // Ajout du message d'erreur au formulaire
+        form.appendChild(messageErrorInput);
     return;
     
   }
   
   // Ajouter la classe "active" au bouton "submitButton"
-  submitButton.classList.add("active");
+  submitButton.classList.add(".active");
+  console.log(submitButton);
 
   // Récupérer le token depuis la sessionStorage
   const token = sessionStorage.getItem("token");
@@ -196,8 +198,7 @@ submitButton.addEventListener("click", function(event) {
   const formData = new FormData();
   formData.append("image", imgButton.files[0]);
   formData.append("title", title);
-  formData.append("category", categorySelect);
-  console.log(formData);
+  formData.append("category", categorySelect.value);
 
   // Effectuer la requête pour envoyer l'image à l'API
   fetch("http://localhost:5678/api/works", {
@@ -234,9 +235,55 @@ submitButton.addEventListener("click", function(event) {
   });
 });
 
+// Ajouter un écouteur d'événements sur le clic de l'icône de suppression
+document.addEventListener("click", function(event) {
+  if (event.target.classList.contains("delete-icon")) {
+    // Récupérer l'ID du travail à supprimer
+    const figure = event.target.closest(".figure-modal-add");
+    const workId = figure.dataset.id;
 
+    // Envoyer une demande DELETE à l'API pour supprimer le travail
+    const token = sessionStorage.getItem("token");
+    fetch(`http://localhost:5678/api/works/${workId}`, {
+      method: "DELETE",
+      headers: {
+        "accept": "*/*",
+        "Authorization": `Bearer ${token}`
+      }
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Erreur lors de la suppression du travail");
+      }
+      // Supprimer l'élément du DOM
+      if (figure) {
+        figure.remove();
+      }
 
-  
+      // Supprimer l'élément correspondant du DOM principal
+      const galleryItems = document.querySelectorAll(".gallery figure");
+      galleryItems.forEach(item => {
+        if (item.dataset.id === workId) {
+          item.remove();
+        }
+        //cacher la modal
+        document.querySelector(".modal").style.display = 'none';
+      });
 
+      // Afficher un message de confirmation
+      const messageSpan = document.createElement("span");
+      messageSpan.classList.add("delete-message");
+      messageSpan.textContent = "Le travail a été supprimé avec succès.";
+      document.body.appendChild(messageSpan);
+      console.log(messageSpan);
 
+      setTimeout(function() {
+        messageSpan.remove();
+      }, 3000);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+});
 
