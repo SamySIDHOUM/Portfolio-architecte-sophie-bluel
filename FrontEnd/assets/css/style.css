@@ -306,10 +306,10 @@ footer nav ul {
 /* Modal Content */
 .modal-content, .modal-addwork{
 	background-color: #FFFFFF;
-	margin-left: 10%;
-	margin-top: 10%;
+	margin-left: 25%;
+	margin-top: 15%;
 	border: 1px solid #888;
-	width: 80%;
+	width: 50%;
 	border-radius: 10px;
 }
 .modal-addwork{
@@ -491,6 +491,20 @@ hr{
 	left: 0;
 	right: 0;
 }
+
+.delete-message{
+	display: block;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #f44336;
+	color: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	font-size: 16px;
+}
+  
 
   /*mobile*/
   @media screen and (max-width:767px){
