@@ -173,7 +173,7 @@ submitButton.addEventListener("click", function(event) {
   const category = categorySelect.value;
   const imageUrl = document.querySelector("#img-container img").src;
 
-  // Vérifier si le champ titre est rempli
+  /*// Vérifier si le champ titre est rempli
   if (title === "") {
     // Créer un message d'erreur
     const messageErrorTitle = document.createElement("span");
@@ -202,7 +202,7 @@ submitButton.addEventListener("click", function(event) {
   }
  
   // Ajouter la classe "active" au bouton "submitButton"
-  //submitButton.classList.add("active");
+  //submitButton.classList.add("active");*/
 
   // Récupérer le token depuis la sessionStorage
   const token = sessionStorage.getItem("token");
@@ -239,9 +239,16 @@ submitButton.addEventListener("click", function(event) {
     // Afficher la modal-content
     modalContent.style.display = "block";
     // Masquer la modal
-    modal.style.display = "none";
+    //modal.style.display = "none";
 
     console.log(data);
+     // Ajouter un message de succès
+    const successMessage = document.createElement("span");
+    successMessage.innerText = "L'image a été envoyée avec succès!";
+    successMessage.style.color = "green";
+    successMessage.classList.add("successMessage");
+    modalContent.appendChild(successMessage);
+    console.log(successMessage);
   })
   .catch(error => {
     console.error(error);
@@ -251,6 +258,7 @@ submitButton.addEventListener("click", function(event) {
 // Ajouter un écouteur d'événements sur le clic de l'icône de suppression
 document.addEventListener("click", function(event) {
   if (event.target.classList.contains("delete-icon")) {
+    event.preventDefault(); // Empêcher le chargement de la page
     // Récupérer l'ID du travail à supprimer
     const icon = event.target;
     const workId = icon.dataset.id;
@@ -284,11 +292,14 @@ document.addEventListener("click", function(event) {
 
       // Afficher un message de confirmation
       const messageSpan = document.createElement("span");
-      messageSpan.className.add("delete-message");
       messageSpan.textContent = "Le travail a été supprimé avec succès.";
-      document.body.appendChild(messageSpan);
+      messageSpan.style.color = "red";
+      messageSpan.classList.add("delete-message");
+      //document.body.appendChild(messageSpan);
+      modalContent.appendChild(messageSpan);
       
-      messageSpan.remove(); 
+      //Masquer le message de confirmation 
+      //messageSpan.remove(); 
       
     })
     .catch(error => {
