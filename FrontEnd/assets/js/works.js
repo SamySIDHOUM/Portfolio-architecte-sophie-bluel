@@ -16,6 +16,7 @@ fetch("http://localhost:5678/api/works")
 
       figcaption.textContent = data[i].title;
       figure.className = data[i].category.name.replaceAll(' ', '-');
+      figure.setAttribute("data-id", data[i].id); // Ajout de l'attribut data-id
       
       figure.appendChild(img);
       figure.appendChild(figcaption);
