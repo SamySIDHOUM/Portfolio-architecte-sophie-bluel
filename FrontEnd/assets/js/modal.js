@@ -28,6 +28,9 @@ fetch("http://localhost:5678/api/works")
       figcaption.textContent = "éditer";
       deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
       deleteIcon.setAttribute("data-id",data[i].id);
+      deleteIcon.addEventListener("click", function(){
+        deleteWork(this.dataset.id);
+      });
 
       figcaption.appendChild(deleteIcon);
       figure.appendChild(img);
@@ -125,6 +128,8 @@ const imgButton = document.getElementById("add-imgbutton");
 // Récupérer les éléments du formulaire
 const titleInput = document.getElementById("title-img");
 
+const imageInput = document.getElementById("add-imgbutton");
+
 //Ecouter le clic sur le bouton Ajouter photo
 imgButton.addEventListener("change", function() {
   const file = this.files[0];
@@ -166,17 +171,55 @@ function createGalleryItem(title, imageUrl) {
   gallery.appendChild(figure);
 }
 
+// Fonction pour vérifier les champs de saisie et mettre à jour le style du bouton de soumission
+ function checkInputModal(){
+ if(titleInput.value !== null && categorySelect.value !== null && imageInput.value !== null){
+  submitButton.style.color ="white";
+  submitButton.style.background ="#1D6154";
+ }
+ };
+ 
+// Ajouter des écouteurs d'événements pour les champs de saisie
+titleInput.addEventListener("change", checkInputModal);
+
+categorySelect.addEventListener("select", checkInputModal);
+
+imageInput.addEventListener("change", checkInputModal);
+ 
+
 submitButton.addEventListener("click", function(event) {
   event.preventDefault(); // Empêcher le rechargement de la page
-  // Récupérer les valeurs du formulaire
-  const title = titleInput.value;
-  const category = categorySelect.value;
-  const imageUrl = document.querySelector("#img-container img").src;
 
-  /*// Vérifier si le champ titre est rempli
-  if (title === "") {
+  /*// Vérifier si les champs sont remplis
+  if (titleInput.value=== "" || categorySelect.value === "" || imageInput.value === "") {
+    //("Veuillez remplir tous les champs");
+    let messageErrorInput = document.createElement("span");
+    messageErrorInput.innerText = "Veuillez remplir tous les champs";
+    messageErrorInput.style.color = "red";
+    messageErrorInput.id ="messageErrorForm";
+      // Ajout du message d'erreur au formulaire
+    form.appendChild(messageErrorInput);
+    return;
+  };*/
+
+  // Vérifier si l'image est charger
+  if (imageInput.value === "") {
     // Créer un message d'erreur
-    const messageErrorTitle = document.createElement("span");
+    let messageErrorTitle = document.createElement("span");
+    messageErrorTitle.innerText = "Veuillez mettre un image.";
+    messageErrorTitle.style.color = "red";
+    messageErrorTitle.id ="messageErrorImage";
+
+    // Ajouter le message d'erreur au formulaire
+    form.appendChild(messageErrorTitle);
+    return;
+    
+  }
+ 
+  // Vérifier si le champ titre est rempli
+  if (titleInput.value === "") {
+    // Créer un message d'erreur
+    let messageErrorTitle = document.createElement("span");
     messageErrorTitle.innerText = "Veuillez mettre un titre valide.";
     messageErrorTitle.style.color = "red";
     messageErrorTitle.id ="messageErrorTitle";
@@ -184,25 +227,22 @@ submitButton.addEventListener("click", function(event) {
     // Ajouter le message d'erreur au formulaire
     form.appendChild(messageErrorTitle);
     return;
-  
+    
   }
 
-  // Vérifier si les champs sont remplis
-  if (title === "" || category === "" || imageUrl === "") {
-    //alert("Veuillez remplir tous les champs");
-    let messageErrorInput = document.createElement("span");
-        messageErrorInput.innerText = "Veuillez remplir tous les champs";
-        messageErrorInput.style.color = "red";
-        messageErrorInput.id ="messageErrorInput";
-         // Ajout du message d'erreur au formulaire
-        form.appendChild(messageErrorInput);
+  // Vérifier si la catégorie est selectionner
+  if (categorySelect.value=== "") {
+    // Créer un message d'erreur
+    let messageErrorTitle = document.createElement("span");
+    messageErrorTitle.innerText = "Veuillez sélectionner une catégorie.";
+    messageErrorTitle.style.color = "red";
+    messageErrorTitle.id ="messageErrorId";
+
+    // Ajouter le message d'erreur au formulaire
+    form.appendChild(messageErrorTitle);
     return;
-  } else {
-    submitButton.classList.add("active");
+    
   }
- 
-  // Ajouter la classe "active" au bouton "submitButton"
-  //submitButton.classList.add("active");*/
 
   // Récupérer le token depuis la sessionStorage
   const token = sessionStorage.getItem("token");
@@ -210,7 +250,7 @@ submitButton.addEventListener("click", function(event) {
   // Créer les données à envoyer à l'API
   const formData = new FormData();
   formData.append("image", imgButton.files[0]);
-  formData.append("title", title);
+  formData.append("title", titleInput.value);
   formData.append("category", categorySelect.value);
 
   // Effectuer la requête pour envoyer l'image à l'API
@@ -239,11 +279,11 @@ submitButton.addEventListener("click", function(event) {
     // Afficher la modal-content
     modalContent.style.display = "block";
     // Masquer la modal
-    //modal.style.display = "none";
+   // modal.style.display = "none";
 
     console.log(data);
      // Ajouter un message de succès
-    const successMessage = document.createElement("span");
+    let successMessage = document.createElement("span");
     successMessage.innerText = "L'image a été envoyée avec succès!";
     successMessage.style.color = "green";
     successMessage.classList.add("successMessage");
@@ -254,6 +294,7 @@ submitButton.addEventListener("click", function(event) {
     console.error(error);
   });
 });
+
 
 // Ajouter un écouteur d'événements sur le clic de l'icône de suppression
 document.addEventListener("click", function(event) {
@@ -291,7 +332,7 @@ document.addEventListener("click", function(event) {
       });
 
       // Afficher un message de confirmation
-      const messageSpan = document.createElement("span");
+     let messageSpan = document.createElement("span");
       messageSpan.textContent = "Le travail a été supprimé avec succès.";
       messageSpan.style.color = "red";
       messageSpan.classList.add("delete-message");
@@ -299,7 +340,7 @@ document.addEventListener("click", function(event) {
       modalContent.appendChild(messageSpan);
       
       //Masquer le message de confirmation 
-      //messageSpan.remove(); 
+      messageSpan.remove(); 
       
     })
     .catch(error => {
