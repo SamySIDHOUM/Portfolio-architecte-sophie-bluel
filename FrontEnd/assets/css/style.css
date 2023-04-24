@@ -491,20 +491,42 @@ hr{
 	left: 0;
 	right: 0;
 }
-
+/*.active-button{
+	background-color: #1D6154;
+	color: white;
+}*/
+#messageErrorForm{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#messageErrorImage{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#messageErrorTitle{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+#messageErrorId{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.successMessage{
+	display: block;
+	position: fixed;
+	top: 50%;
+	left: 50%
+}
 .delete-message{
 	display: block;
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: #f44336;
-	color: #fff;
-	padding: 10px;
-	border-radius: 5px;
-	font-size: 16px;
 }
-  
 
   /*mobile*/
   @media screen and (max-width:767px){
@@ -520,7 +542,36 @@ hr{
 		margin: 5% 5%; 
 	}
 	#gallery-modal{
-		height: 280px;
+		height: 230px;
+	}
+	.modal-content figcaption{
+		font-size: xx-small;
+	}
+	.modal-content p, .modal-addwork p{
+		margin-top: 37px;
+		margin-bottom: 30px;
+		font-size: 16px;
+	}
+	.modal-addwork p{
+		margin-top: 13px;
+		margin-bottom: 23px;
+	}
+	.delete-icon{
+		font-size: 6px;
+	}
+	hr{
+		margin-top: 15px;
+		margin-bottom: 5%;
+	}
+	.add-bts{
+		margin: 15px auto 0 auto;
+		width: 120px;
+		height: 25px;
+	}
+	.delete-gal{
+		font-size: x-small;
+		margin-top: 20px;
+		margin-bottom: 30px;
 	}
   }
   
