@@ -9,8 +9,14 @@ const closeSpan = document.querySelector(".close");
 
 // Récupérer l'élément DOM qui contiendra la galerie
 const gallery = document.querySelector("#gallery-modal");
+
 // Récupérer modal content
 const modalContent = document.querySelector(".modal-content");
+
+// Récupérer le formulaire et le bouton submit
+const form = document.getElementById("form-addwork");
+const submitButton = document.getElementById("submit-work");
+const imgButton = document.getElementById("add-imgbutton");
 
 // Récupération des projets via l'API
 fetch("http://localhost:5678/api/works")
@@ -30,6 +36,9 @@ fetch("http://localhost:5678/api/works")
       deleteIcon.setAttribute("data-id",data[i].id);
       deleteIcon.addEventListener("click", function(){
         deleteWork(this.dataset.id);
+        //Suppression de la figure
+        let figure = this.parentNode.parentNode;
+        figure.parentNode.removeChild(figure);
       });
 
       figcaption.appendChild(deleteIcon);
@@ -70,11 +79,22 @@ window.addEventListener("keydown", function(event) {
 // Récupérer le bouton "add-bts"
 const addButton = document.querySelector(".add-bts");
 
+// Fonction pour réinitialiser le formulaire
+function resetForm() {
+  let imgPreview = document.querySelector(".img-preview");
+  if (imgPreview !== null){
+    imgPreview.remove();
+  }
+  document.getElementById("input-container").style.display = "";
+  document.querySelector("#img-container p").style.display = "";
+  form.reset();
+}
 // Récupérer la modal-addwork
 const modalAddwork = document.querySelector(".modal-addwork");
 
 // Ajouter un événement "click" au bouton "add-bts"
 addButton.addEventListener("click", function() {
+  resetForm();
   modalAddwork.style.display = "block";
   modalContent.style.display = "none";
 });
@@ -120,14 +140,8 @@ fetch("http://localhost:5678/api/categories")
   })
   .catch(error => console.error(error));
 
- // Récupérer le formulaire et le bouton submit
-const form = document.getElementById("form-addwork");
-const submitButton = document.getElementById("submit-work");
-const imgButton = document.getElementById("add-imgbutton");
-
 // Récupérer les éléments du formulaire
 const titleInput = document.getElementById("title-img");
-
 const imageInput = document.getElementById("add-imgbutton");
 
 //Ecouter le clic sur le bouton Ajouter photo
@@ -156,24 +170,28 @@ function createGalleryItem(title, imageUrl) {
   const img = document.createElement("img");
   const figcaption = document.createElement("figcaption");
   const deleteIcon = document.createElement("i");
+  const galleryModal = document.getElementById("gallery-modal");
 
   // Définir les attributs des éléments créés
   img.src = imageUrl;
   img.alt = title;
   deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
-  figcaption.textContent = "éditer";
 
   // Ajouter les éléments créés au DOM
-  figcaption.appendChild(deleteIcon);
   figure.appendChild(img);
+  figcaption.textContent = title;
   figure.appendChild(figcaption);
-  figure.classList.add("figure-modal-add");
   gallery.appendChild(figure);
+
+  figcaption.textContent = "éditer";
+  figcaption.appendChild(deleteIcon);
+  figure.classList.add("figure-modal-add");
+  galleryModal.appendChild(figure);
 }
 
 // Fonction pour vérifier les champs de saisie et mettre à jour le style du bouton de soumission
  function checkInputModal(){
- if(titleInput.value !== null && categorySelect.value !== null && imageInput.value !== null){
+ if(titleInput.value !== "" && categorySelect.value !== "" && imageInput.value !== ""){
   submitButton.style.color ="white";
   submitButton.style.background ="#1D6154";
  }
@@ -182,25 +200,13 @@ function createGalleryItem(title, imageUrl) {
 // Ajouter des écouteurs d'événements pour les champs de saisie
 titleInput.addEventListener("change", checkInputModal);
 
-categorySelect.addEventListener("select", checkInputModal);
+categorySelect.addEventListener("change", checkInputModal);
 
 imageInput.addEventListener("change", checkInputModal);
  
-
+// Ajouter un événement pour gérer les messages d'erreur
 submitButton.addEventListener("click", function(event) {
   event.preventDefault(); // Empêcher le rechargement de la page
-
-  /*// Vérifier si les champs sont remplis
-  if (titleInput.value=== "" || categorySelect.value === "" || imageInput.value === "") {
-    //("Veuillez remplir tous les champs");
-    let messageErrorInput = document.createElement("span");
-    messageErrorInput.innerText = "Veuillez remplir tous les champs";
-    messageErrorInput.style.color = "red";
-    messageErrorInput.id ="messageErrorForm";
-      // Ajout du message d'erreur au formulaire
-    form.appendChild(messageErrorInput);
-    return;
-  };*/
 
   // Vérifier si l'image est charger
   if (imageInput.value === "") {
@@ -273,21 +279,20 @@ submitButton.addEventListener("click", function(event) {
     createGalleryItem(title, data.imageUrl);
 
     // Réinitialiser le formulaire
-    form.reset();
+    resetForm();
     // Masquer la modal-addwork
     modalAddwork.style.display = "none";
     // Afficher la modal-content
     modalContent.style.display = "block";
-    // Masquer la modal
-   // modal.style.display = "none";
-
+   
     console.log(data);
      // Ajouter un message de succès
     let successMessage = document.createElement("span");
     successMessage.innerText = "L'image a été envoyée avec succès!";
     successMessage.style.color = "green";
-    successMessage.classList.add("successMessage");
+    successMessage.classList.add("success-message");
     modalContent.appendChild(successMessage);
+    event.stopPropagation();
     console.log(successMessage);
   })
   .catch(error => {
@@ -295,57 +300,37 @@ submitButton.addEventListener("click", function(event) {
   });
 });
 
-
-// Ajouter un écouteur d'événements sur le clic de l'icône de suppression
-document.addEventListener("click", function(event) {
-  if (event.target.classList.contains("delete-icon")) {
-    event.preventDefault(); // Empêcher le chargement de la page
-    // Récupérer l'ID du travail à supprimer
-    const icon = event.target;
-    const workId = icon.dataset.id;
-
-    // Envoyer une demande DELETE à l'API pour supprimer le travail
-    const token = sessionStorage.getItem("token");
-    fetch(`http://localhost:5678/api/works/${workId}`, {
-      method: "DELETE",
-      headers: {
-        "accept": "*/*",
-        "Authorization": `Bearer ${token}`
-      }
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("Erreur lors de la suppression du travail");
-      }
-      // Supprimer l'élément du DOM
-      const figure = icon.closest(".figure-modal-add");
-      if (figure) {
-        figure.remove();
-      }
-
-      // Supprimer l'élément correspondant du DOM principal
-      const galleryItems = document.querySelectorAll(".gallery figure");
-      galleryItems.forEach(item => {
-        if (item.dataset.id === workId) {
-          item.remove();
+function deleteWork(id) {
+  const token = sessionStorage.getItem("token");
+  fetch(`http://localhost:5678/api/works/` + id, {
+    method: "DELETE",
+    headers: {
+      "accept": "*/*",
+      "Authorization": `Bearer ${token}`
+    }
+  })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Erreur lors de la suppression du travail");
         }
-      });
+        
+        // Afficher un message de confirmation
+        let messageDelete = document.createElement("span");
+        messageDelete.textContent = "Le travail a été supprimé avec succès.";
+        messageDelete.style.color = "red";
+        messageDelete.classList.add("delete-message");
+        
+        modalContent.appendChild(messageDelete);
+        // Afficher la modal-content
+        modalContent.style.display = "block";
 
-      // Afficher un message de confirmation
-     let messageSpan = document.createElement("span");
-      messageSpan.textContent = "Le travail a été supprimé avec succès.";
-      messageSpan.style.color = "red";
-      messageSpan.classList.add("delete-message");
-      //document.body.appendChild(messageSpan);
-      modalContent.appendChild(messageSpan);
-      
-      //Masquer le message de confirmation 
-      messageSpan.remove(); 
-      
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  }
-});
+        //Masquer le message de confirmation
+       // messageDelete.remove();
+
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+
 
