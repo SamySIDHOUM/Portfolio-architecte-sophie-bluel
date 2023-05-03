@@ -491,45 +491,43 @@ hr{
 	left: 0;
 	right: 0;
 }
-/*.active-button{
-	background-color: #1D6154;
-	color: white;
-}*/
-#messageErrorForm{
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
 #messageErrorImage{
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin-bottom: 4%;
 }
 #messageErrorTitle{
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin-bottom: 4%;
 }
 #messageErrorId{
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin-bottom: 4%;
 }
-.successMessage{
-	display: block;
-	position: fixed;
-	top: 50%;
-	left: 50%
+.success-message{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: green;
+	color: #FFFFFF;
+	margin-bottom: 4%;
 }
 .delete-message{
-	display: block;
-	position: fixed;
-	top: 50%;
-	left: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: red;
+	color: #FFFFFF;
+	margin-bottom: 4%;
 }
 
   /*mobile*/
-  @media screen and (max-width:767px){
+@media screen and (max-width:767px){
 	button{
 		height: 30px;
 		margin-right: 5px;
@@ -573,5 +571,8 @@ hr{
 		margin-top: 20px;
 		margin-bottom: 30px;
 	}
-  }
+	.success-message, .delete-message{
+		font-size: x-small;
+	}
+}
   
