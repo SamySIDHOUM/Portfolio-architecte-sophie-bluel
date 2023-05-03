@@ -196,7 +196,25 @@ function createGalleryItem(title, imageUrl) {
   submitButton.style.background ="#1D6154";
  }
  };
- 
+
+ //Fonction pour affiche un message dans la modal en fonction du type passé en paramètre
+ function showMessage(message, type) {
+  let messageElement = document.createElement("span");
+  messageElement.textContent = message;
+  
+  if (type === "success") {
+    messageElement.classList.add("success-message");
+  } else if (type === "delete") {
+    messageElement.classList.add("delete-message");
+  };
+  
+  modalContent.appendChild(messageElement);
+
+  setTimeout(() => {
+    messageElement.remove();
+  }, 3000);
+}  
+
 // Ajouter des écouteurs d'événements pour les champs de saisie
 titleInput.addEventListener("change", checkInputModal);
 
@@ -276,7 +294,7 @@ submitButton.addEventListener("click", function(event) {
   })
   .then(data => {
     // Créer les éléments à ajouter dans le DOM
-    createGalleryItem(title, data.imageUrl);
+    createGalleryItem(titleInput.value, data.imageUrl);
 
     // Réinitialiser le formulaire
     resetForm();
@@ -284,16 +302,10 @@ submitButton.addEventListener("click", function(event) {
     modalAddwork.style.display = "none";
     // Afficher la modal-content
     modalContent.style.display = "block";
+
+    // Ajouter un message de succès
+    showMessage("L'image a été envoyée avec succès!", "success");
    
-    console.log(data);
-     // Ajouter un message de succès
-    let successMessage = document.createElement("span");
-    successMessage.innerText = "L'image a été envoyée avec succès!";
-    successMessage.style.color = "green";
-    successMessage.classList.add("success-message");
-    modalContent.appendChild(successMessage);
-    event.stopPropagation();
-    console.log(successMessage);
   })
   .catch(error => {
     console.error(error);
@@ -313,19 +325,11 @@ function deleteWork(id) {
         if (!response.ok) {
           throw new Error("Erreur lors de la suppression du travail");
         }
-        
-        // Afficher un message de confirmation
-        let messageDelete = document.createElement("span");
-        messageDelete.textContent = "Le travail a été supprimé avec succès.";
-        messageDelete.style.color = "red";
-        messageDelete.classList.add("delete-message");
-        
-        modalContent.appendChild(messageDelete);
         // Afficher la modal-content
         modalContent.style.display = "block";
 
-        //Masquer le message de confirmation
-       // messageDelete.remove();
+        // Afficher un message de confirmation
+        showMessage("Le travail a été supprimé avec succès.", "delete");
 
       })
       .catch(error => {
