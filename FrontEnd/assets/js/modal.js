@@ -18,6 +18,19 @@ const form = document.getElementById("form-addwork");
 const submitButton = document.getElementById("submit-work");
 const imgButton = document.getElementById("add-imgbutton");
 
+// Fonction pour actualiser la page
+function refreshPage() {
+  location.reload();
+}
+
+// Fonction pour supprimer 
+function DeleteWorkId(event) {
+  deleteWork(this.dataset.id);
+  //Suppression de la figure
+  let figure = this.parentNode.parentNode;
+  figure.parentNode.removeChild(figure);
+}
+
 // Récupération des projets via l'API
 fetch("http://localhost:5678/api/works")
   .then(response => response.json())
@@ -34,12 +47,13 @@ fetch("http://localhost:5678/api/works")
       figcaption.textContent = "éditer";
       deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
       deleteIcon.setAttribute("data-id",data[i].id);
-      deleteIcon.addEventListener("click", function(){
+      /*deleteIcon.addEventListener("click", function(){
         deleteWork(this.dataset.id);
         //Suppression de la figure
         let figure = this.parentNode.parentNode;
         figure.parentNode.removeChild(figure);
-      });
+      });*/
+      deleteIcon.addEventListener("click", DeleteWorkId);
 
       figcaption.appendChild(deleteIcon);
       figure.appendChild(img);
@@ -60,12 +74,14 @@ editButton.addEventListener("click", function() {
 // Ajouter un événement "click" au span "close" pour fermer la modal
 closeSpan.addEventListener("click", function() {
   modal.style.display = "none";
+  refreshPage();
   });
 
 // Ajouter un événement "click" en dehors de la modal pour fermer la modal
 window.addEventListener("click", function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+    refreshPage();
   }
 });
 
@@ -73,6 +89,7 @@ window.addEventListener("click", function(event) {
 window.addEventListener("keydown", function(event) {
   if (event.key === "Escape" && modal.style.display === "block") {
     modal.style.display = "none";
+    refreshPage();
   }
 });
 
@@ -176,6 +193,13 @@ function createGalleryItem(title, imageUrl) {
   img.src = imageUrl;
   img.alt = title;
   deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
+  /*deleteIcon.addEventListener("click", function(){
+    deleteWork(this.dataset.id);
+    //Suppression de la figure
+    let figure = this.parentNode.parentNode;
+    figure.parentNode.removeChild(figure);
+  });*/
+  deleteIcon.addEventListener("click", DeleteWorkId);
 
   // Ajouter les éléments créés au DOM
   figure.appendChild(img);
@@ -197,7 +221,7 @@ function createGalleryItem(title, imageUrl) {
  }
  };
 
- //Fonction pour affiche un message dans la modal en fonction du type passé en paramètre
+ //Fonction pour affiche un message dans la modal 
  function showMessage(message, type) {
   let messageElement = document.createElement("span");
   messageElement.textContent = message;
