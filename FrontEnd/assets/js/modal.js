@@ -20,7 +20,9 @@ const imgButton = document.getElementById("add-imgbutton");
 
 // Fonction pour actualiser la page
 function refreshPage() {
-  location.reload();
+  const mainGallery = document.querySelector('.gallery');
+  mainGallery.innerHTML = '';
+  loadGallery(mainGallery);
 }
 
 // Fonction pour supprimer 
@@ -47,12 +49,6 @@ fetch("http://localhost:5678/api/works")
       figcaption.textContent = "éditer";
       deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
       deleteIcon.setAttribute("data-id",data[i].id);
-      /*deleteIcon.addEventListener("click", function(){
-        deleteWork(this.dataset.id);
-        //Suppression de la figure
-        let figure = this.parentNode.parentNode;
-        figure.parentNode.removeChild(figure);
-      });*/
       deleteIcon.addEventListener("click", DeleteWorkId);
 
       figcaption.appendChild(deleteIcon);
@@ -193,23 +189,15 @@ function createGalleryItem(title, imageUrl) {
   img.src = imageUrl;
   img.alt = title;
   deleteIcon.classList.add("fa-solid", "fa-trash-can", "delete-icon");
-  /*deleteIcon.addEventListener("click", function(){
-    deleteWork(this.dataset.id);
-    //Suppression de la figure
-    let figure = this.parentNode.parentNode;
-    figure.parentNode.removeChild(figure);
-  });*/
   deleteIcon.addEventListener("click", DeleteWorkId);
 
-  // Ajouter les éléments créés au DOM
-  figure.appendChild(img);
-  figcaption.textContent = title;
-  figure.appendChild(figcaption);
-  gallery.appendChild(figure);
-
   figcaption.textContent = "éditer";
+  figure.classList.add("figure-modal-add")
+
+  // Ajouter les éléments créés au DOM
   figcaption.appendChild(deleteIcon);
-  figure.classList.add("figure-modal-add");
+  figure.appendChild(img);
+  figure.appendChild(figcaption);
   galleryModal.appendChild(figure);
 }
 
@@ -336,6 +324,7 @@ submitButton.addEventListener("click", function(event) {
   });
 });
 
+// Fonction pour supprimer un travail
 function deleteWork(id) {
   const token = sessionStorage.getItem("token");
   fetch(`http://localhost:5678/api/works/` + id, {
@@ -361,4 +350,30 @@ function deleteWork(id) {
       });
 }
 
+// Fonction pour charger la galerie de travaux
+function loadGallery(mainGallery){
+  fetch("http://localhost:5678/api/works")
+      .then(response => response.json())
+      .then(data => {
+        //Créer un élément figure
+        for (let i = 0; i < data.length; i++) {
 
+          let figure = document.createElement("figure");
+          let img = document.createElement("img");
+          let figcaption = document.createElement("figcaption");
+
+          img.src = data[i].imageUrl;
+          img.alt = data[i].title;
+
+          figcaption.textContent = data[i].title;
+          figure.className = data[i].category.name.replaceAll(' ', '-');
+          figure.setAttribute("data-id", data[i].id); // Ajout de l'attribut data-id
+
+          figure.appendChild(img);
+          figure.appendChild(figcaption);
+
+          mainGallery.appendChild(figure);
+        }
+      })
+      .catch(error => console.error(error));
+}
