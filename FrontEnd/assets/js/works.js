@@ -46,10 +46,12 @@ fetch("http://localhost:5678/api/categories")
     // Ajouter une classe CSS à l'élément div des filtres
     filters.classList.add("filter-buttons");
     gallery.before(filters);
+
     // Créer un bouton pour afficher tous les éléments
     buttonAll.innerText = "Tous";
+    buttonAll.classList.add("active"); // Ajouter la classe active au bouton "Tous"
     filters.appendChild(buttonAll);
-
+    
     // Ajouter une classe CSS active au bouton "Tous"
     buttonAll.addEventListener("click", function(){
         let children = filters.childNodes;
@@ -94,6 +96,9 @@ fetch("http://localhost:5678/api/categories")
       // Ajouter la classe "active" au bouton de filtre sélectionné
       filterButton.classList.add("active");
 
+      // Masquer le bouton "Tous" en supprimant la classe "active"
+      buttonAll.classList.remove("active");
+
       // Afficher les éléments de la catégorie correspondante, et masquer les autres 
        filterButtons(this.textContent);
       });
@@ -124,7 +129,7 @@ const loginButton = document.querySelector('nav li a[href="./login.html"]');
 // Vérification de la présence du token dans la sessionStorage
 if (sessionStorage.getItem("token")) {
   // Afficher "Logout" sur le bouton de connexion
-  loginButton.textContent = "Logout";
+  loginButton.textContent = "logout";
 }
 
 // Fonction pour alterner l'état de connexion de l'utilisateur
@@ -132,11 +137,11 @@ function toggleLogin() {
   if (sessionStorage.getItem("token")) {
     // Déconnecter l'utilisateur et supprimer le token de la sessionStorage
     sessionStorage.removeItem("token");
-    loginButton.textContent = "Login";
+    loginButton.textContent = "login";
   } else {
     // Connecter l'utilisateur et stocker le token dans la sessionStorage
     sessionStorage.setItem("token", "mytoken");
-    loginButton.textContent = "Logout";
+    loginButton.textContent = "logout";
   }
 }
 

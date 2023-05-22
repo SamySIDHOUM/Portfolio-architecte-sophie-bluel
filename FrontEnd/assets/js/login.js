@@ -2,13 +2,33 @@
 const form = document.querySelector("#login");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
+
+// Expression régulière pour valider le format de l'e-mail
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // Écoute de l'événement de soumission du formulaire
 form.addEventListener("submit", (event) => {
   // Empêcher l'envoi du formulaire par défaut
   event.preventDefault();
 
-  // Récupération des valeurs des champs
-  const email = emailInput.value;
+ // Récupération de la valeur du champ email
+ const email = emailInput.value.trim();
+
+ // Validation de l'e-mail avec l'expression régulière
+ if (!emailRegex.test(email)) {
+   // Affichage d'un message d'erreur si l'e-mail est invalide
+   let messageError = document.createElement("span");
+   messageError.innerText = "Adresse e-mail invalide";
+   messageError.style.color = "red";
+   messageError.id = "messageError";
+
+   if (!document.getElementById("messageError")) {
+    form.appendChild(messageError); // Ajout du message d'erreur à la page de connexion
+   }
+   return; // Arrêter l'exécution du code si l'e-mail est invalide
+ }
+
+ // Récupération de la valeur du champ mot de passe
   const password = passwordInput.value;
 
   // Envoi de la requête POST à l'API pour se connecter avec les informations de connexion saisies

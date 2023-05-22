@@ -31,6 +31,8 @@ function DeleteWorkId(event) {
   //Suppression de la figure
   let figure = this.parentNode.parentNode;
   figure.parentNode.removeChild(figure);
+  const figureMainGallery = document.querySelector('[data-id="'+ this.dataset.id +'"]');
+  figureMainGallery.remove();
 }
 
 // Récupération des projets via l'API
@@ -161,20 +163,45 @@ const imageInput = document.getElementById("add-imgbutton");
 imgButton.addEventListener("change", function() {
   const file = this.files[0];
   const reader = new FileReader();
-  reader.addEventListener("load", function() {
-    const imageUrl = reader.result;
-    const imgPreview = document.createElement("img");
-    imgPreview.src = imageUrl;
-    imgPreview.classList.add("img-preview");
 
-    // Masquer les autres éléments et afficher l'image
-    imgPreview.style.display = "block";
-    imgButton.style.display = "none";
-    document.getElementById("input-container").style.display = "none";
-    document.querySelector("#img-container p").style.display = "none";
-    document.getElementById("img-container").appendChild(imgPreview);
-  });
-  reader.readAsDataURL(file);
+  // Vérifier le format et la taille du fichier
+  const allowedFormats = ["image/jpeg", "image/png"];
+  const maxSize = 4 * 1024 * 1024; 
+
+  // Supprimer le message d'erreur précédent s'il existe
+  const errorMessage = document.getElementById("showErreurMessage");
+  if (errorMessage) {
+    errorMessage.parentNode.removeChild(errorMessage);
+  }
+
+  if (allowedFormats.includes(file.type) && file.size <= maxSize) {
+    reader.addEventListener("load", function() {
+      const imageUrl = reader.result;
+      const imgPreview = document.createElement("img");
+      imgPreview.src = imageUrl;
+      imgPreview.classList.add("img-preview");
+
+      // Masquer les autres éléments et afficher l'image
+      imgPreview.style.display = "block";
+      imageInput.style.display = "none";
+      document.getElementById("input-container").style.display = "none";
+      document.querySelector("#img-container p").style.display = "none";
+      document.getElementById("img-container").appendChild(imgPreview);
+    });
+
+    reader.readAsDataURL(file);
+  } else {
+    // Afficher un message d'erreur
+    let showErreurMessage = document.createElement("span");
+    showErreurMessage.innerText = "Veuillez sélectionner une image au format JPG ou PNG, et d'une taille maximale de 4MB.";
+    showErreurMessage.style.color = "red";
+    showErreurMessage.id = "showErreurMessage";
+
+    modalAddwork.appendChild(showErreurMessage);
+
+    // Réinitialiser la valeur de l'input de l'image
+    imageInput.value = "";
+  }
 });
 
 // Fonction pour créer les éléments à ajouter dans le DOM
